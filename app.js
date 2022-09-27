@@ -8,9 +8,9 @@ module.exports = app;
 connectDB();
 async function start(){
     const apolloServer = new ApolloServer({
-        typeDefs: typeDefs,
-        resolvers: resolvers
-    })
+        typeDefs,
+        resolvers
+    });
 
     await apolloServer.start();
     apolloServer.applyMiddleware({app});

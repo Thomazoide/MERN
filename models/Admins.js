@@ -1,5 +1,5 @@
 const {Schema, model} = require('mongoose');
-
+//Modelo de usuarios/as administradores/as
 const Admin = new Schema({
     deIns: {
         type: Boolean,
@@ -18,4 +18,4 @@ const Admin = new Schema({
     }
 });
 
-module.exports = model("Admin", Admin);
+module.exports = model("Admins", Admin);

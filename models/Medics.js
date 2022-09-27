@@ -1,5 +1,5 @@
 const {Schema, model} = require('mongoose');
-
+//Modelo de usuarios medicos/as
 const Medics = new Schema({
     tipo: {
         type: String,
