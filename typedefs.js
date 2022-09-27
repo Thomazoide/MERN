@@ -8,7 +8,7 @@ const typeDefs = gql`
         rut: String!
         email: String
         cell: String
-        pass: String
+        pass: String!
     }
 
     type Admins{
