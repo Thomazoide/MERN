@@ -69,9 +69,15 @@ const typeDefs = gql`
         crearMed(tipo: String, nombre: String, rut: String, email: String, cell: String, pass: String): Medics
         crearAdmin(deIns: Boolean, nombre: String, rut: String, email: String, cell: String, pass: String): Admins
         crearNurse(rut: String, nombre: String, email: String, pass: String): Nurses
+        crearAuxiliar(nombre: String, rut: String, email: String, pass: String)
+        crearSostenedor(nombre: String, rut: String, rutPaciente: String, seguro: String)
+        crearPaciente(nombre: String, rut: String, rutSostenedor: String, desc: String)
         deleteMed(rut: String): String
         deleteAdmin(rut: String): String
         deleteNurse(rut: String): String
+        deleteAux(rut: String): String
+        deleteSos(rut: String): String
+        deletePac(rut: String): String
     }
 `
 module.exports = {typeDefs};

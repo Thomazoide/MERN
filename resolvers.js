@@ -115,6 +115,24 @@ const resolvers = {
             await nuevoNurse.save();
             return nuevoNurse;
         },
+        crearAuxiliar: async (_, args) => {
+            const {nombre, rut, email, pass} = args;
+            const nAux = new JAuxs({nombre, rut, email, pass});
+            await nAux.save();
+            return nAux;
+        },
+        crearSostenedor: async (_, args) => {
+            const {nombre, rut, rutPaciente, seguro} = args;
+            const nSos = new SPacientes({nombre, rut, rutPaciente, seguro});
+            await nSos.save();
+            return nSos;
+        },
+        crearPaciente: async (_, args) => {
+            const {nombre, rut, rutSostenedor, desc} = args;
+            const nPac = new Pacientes({nombre, rut, rutSostenedor, desc});
+            await nPac.save();
+            return nPac;
+        },
         deleteMed: async (_, args) => {
             const meds = await Medics.find();
             let dMed = null;
@@ -124,7 +142,7 @@ const resolvers = {
                 }
             }
             await dMed.delete();
-            return `Usuario de rut ${args.rut} eliminado de base de datos.`
+            return `Usuario de rut ${args.rut} eliminado de base de datos.`;
         },
         deleteAdmin: async (_, args) => {
             const admns = await Admins.find();
@@ -135,7 +153,7 @@ const resolvers = {
                 }
             }
             await dAdmn.delete();
-            return `Usuario de rut ${args.rut} eliminado de base de datos.`
+            return `Usuario de rut ${args.rut} eliminado de base de datos.`;
         },
         deleteNurse: async (_, args) => {
             const nurses = await Nurses.find();
@@ -146,7 +164,40 @@ const resolvers = {
                 }
             }
             await dNurs.delete();
-            return `Usuario de rut ${args.rut} eliminado de base de datos.`
+            return `Usuario de rut ${args.rut} eliminado de base de datos.`;
+        },
+        deleteAux: async (_, args) => {
+            const auxs = await JAuxs.find();
+            let dAux = null;
+            for(let aux of auxs){
+                if(aux.rut == args.rut){
+                    dAux = aux;
+                }
+            }
+            await dAux.delete();
+            return `Usuario de rut ${args.rut} eliminado de base de datos.`;
+        },
+        deleteSos: async (_, args) => {
+            const soss = await SPacientes.find();
+            let dSos = null;
+            for(let sos of soss){
+                if(sos.rut == args.rut){
+                    dSos = sos;
+                }
+            }
+            await dSos.delete();
+            return `Usuario de rut ${args.rut} eliminado de base de datos.`;
+        },
+        deletePac: async (_, args) => {
+            const pacs = await Pacientes.find();
+            let dPac = null;
+            for(let pac in pacs){
+                if(pac.rut == args.rut){
+                    dPac = pac;
+                }
+            }
+            await dPac.delete();
+            return `Usuario de rut ${args.rut} eliminado de base de datos.`;
         }
     },
 }
