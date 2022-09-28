@@ -1,6 +1,9 @@
 const Medics = require('./models/Medics');
 const Admins = require('./models/Admins');
 const Nurses = require('./models/Nurses');
+const JAuxs = require('./models/JAuxiliar');
+const SPacientes = require('./models/SosPaciente');
+const Pacientes = require('./models/Paciente');
 const resolvers = {
     Query: {
         hello: () => 'Usuario no encontrado',
@@ -8,7 +11,7 @@ const resolvers = {
             const meds = await Medics.find();
             return meds;
         },
-        async getMedics(_, {rut}){
+        getMedics: async (_, {rut}) => {
             const meds = await Medics.find();
             let fmed = null;
             for(let med of meds){
@@ -52,6 +55,42 @@ const resolvers = {
                     return {
                         message: "Usuario no encontrado",
                     };
+                }
+            }
+        },
+        getAllAuxs: async () => {
+            const auxs = await JAuxs.find();
+            return auxs;
+        },
+        getAux: async (_, {rut}) => {
+            const auxs = await JAuxs.find();
+            for(let aux of auxs){
+                if(aux.rut == rut){
+                    return aux;
+                }
+            }
+        },
+        getAllSPacientes: async () => {
+            const spacients = await SPacientes.find();
+            return spacients;
+        },
+        getSPaciente: async (_, {rut}) => {
+            const spacients = await SPacientes.find();
+            for(let spacient of spacients){
+                if(spacient.rut == rut){
+                    return spacient;
+                }
+            }
+        },
+        getAllPasientes: async () => {
+            const pacients = await Pacientes.find();
+            return pacients;
+        },
+        getPaciente: async (_, {rut}) => {
+            const pacients = await Pacientes.find();
+            for(let pacient of pacients){
+                if(pacient.rut == rut){
+                    return pacient;
                 }
             }
         }
