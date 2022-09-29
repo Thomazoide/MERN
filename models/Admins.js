@@ -12,6 +12,7 @@ const Admin = new Schema({
     },
     email: String,
     cell: String,
+    sede: String,
     pass: {
         type: String,
         required: true,

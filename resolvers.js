@@ -4,6 +4,9 @@ const Nurses = require('./models/Nurses');
 const JAuxs = require('./models/JAuxiliar');
 const SPacientes = require('./models/SosPaciente');
 const Pacientes = require('./models/Paciente');
+const Sedes = require('./models/Sedes');
+const Boxs = require('./models/Boxs');
+const Reservas = require('./models/Reservas');
 const resolvers = {
     Query: {
         hello: () => 'Usuario no encontrado',
@@ -82,7 +85,7 @@ const resolvers = {
                 }
             }
         },
-        getAllPasientes: async () => {
+        getAllPacientes: async () => {
             const pacients = await Pacientes.find();
             return pacients;
         },
@@ -93,7 +96,43 @@ const resolvers = {
                     return pacient;
                 }
             }
-        }
+        },
+        getAllSedes: async () => {
+            const sedes = await Sedes.find();
+            return sedes;
+        },
+        getSede: async (_, {codigo}) => {
+            const sedes = await Sedes.find();
+            for(let sede of sedes){
+                if(sede.codigo == codigo){
+                    return sede;
+                }
+            }
+        },
+        getAllBoxs: async () => {
+            const boxs = await Boxs.find();
+            return boxs;
+        },
+        getBox: async (_, {codSede, numBox}) => {
+            const boxs = await Boxs.find();
+            for(let box of boxs){
+                if(box.codSede == codSede && box.nro == numBox){
+                    return box;
+                }
+            }
+        },
+        getAllReservas: async () => {
+            const reservs = await Reservas.find();
+            return reservs;
+        },
+        getReserva: async (_, {rutPaciente}) => {
+            const reservs = await Reservas.find();
+            for(let reserva of reservs){
+                if(reserva.rutPaciente == rutPaciente){
+                    return reserva;
+                }
+            }
+        },
     },
 
     Mutation: {
@@ -104,8 +143,8 @@ const resolvers = {
             return nuevoMed;
         },
         crearAdmin: async (_, args) => {
-            const {deIns, nombre, rut, email, cell, pass} = args;
-            const nuevoAdmin = new Admins({deIns, nombre, rut, email, cell, pass});
+            const {deIns, nombre, rut, email, cell, sede, pass} = args;
+            const nuevoAdmin = new Admins({deIns, nombre, rut, email, cell, sede, pass});
             await nuevoAdmin.save();
             return nuevoAdmin;
         },
@@ -132,6 +171,23 @@ const resolvers = {
             const nPac = new Pacientes({nombre, rut, rutSostenedor, desc});
             await nPac.save();
             return nPac;
+        },
+        crearSede: async (_, args) => {
+            const {nombre, ciudad, comuna, email, codigo} = args;
+            const nSede = new Sedes({nombre, ciudad, comuna, email, codigo});
+            await nSede.save();
+            return nSede;
+        },
+        crearBox: async (_, args) => {
+            const {size, nro, codSede, tipoBox} = args;
+            const nBox = new Boxs({size, nro, codSede, tipoBox});
+            await nBox.save();
+            return nBox;
+        },
+        crearReserva: async (_, args) => {
+            const {fecha, hora, rutSostenedor, rutPaciente, rutProfesional, codSede, numBox} = args;
+            const nReserva = new Reservas({fecha, hora, rutSostenedor, rutPaciente, rutProfesional, codSede, numBox});
+            await nReserva.save();
         },
         deleteMed: async (_, args) => {
             const meds = await Medics.find();
@@ -198,6 +254,39 @@ const resolvers = {
             }
             await dPac.delete();
             return `Usuario de rut ${args.rut} eliminado de base de datos.`;
+        },
+        deleteSede: async(_, args) => {
+            const sedes = await Sedes.find();
+            let dSede = null;
+            for(let sede of sedes){
+                if(sede.codigo == args.codigo){
+                    dSede = sede;
+                }
+            }
+            await dSede.delete();
+            return `Sede ${args.codigo} eliminada`;
+        },
+        deleteBox: async (_, args) => {
+            const boxs = await Boxs.find();
+            let dBox = null;
+            for(let box of boxs){
+                if(box.codSede == args.codSede && box.nro == args.numBox){
+                    dBox = box;
+                }
+            }
+            await dBox.delete();
+            return `Box numero ${args.numBox} de la sede ${args.codSede} eliminado`;
+        },
+        deleteReserva: async (_, args) => {
+            const reservs = await Reservas.find();
+            let dReserva = null;
+            for(let reserva of reservs){
+                if(reserva.rutSostenedor == args.rutSostenedor){
+                    dReserva = reserva;
+                }
+            }
+            await dReserva.delete();
+            return `Reserva eliminada, hora nuevamente disponible`;
         }
     },
 }

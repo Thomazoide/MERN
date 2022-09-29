@@ -31,17 +31,37 @@ def extraerData():
         for linea in data.readlines():
             yield linea.split('\n')[0].split(',')
 data = list(extraerData())
+#Funcion para poner los puntos donde corresponde en cada rut
+def arreglarRuts(d):
+    for n, usr in enumerate(data):
+        ndata = d
+        rut = usr[0]
+        if(len(rut) <= 9):
+            rut = rut[0] + '.' + rut[1:-1] + rut[-1]
+            rut = rut[0:5] + '.' + rut[5:-1] + rut[-1]
+            ndata[n][0] = rut
+        else:
+            rut = rut[0:2] + '.' + rut[2:-1] + rut[-1]
+            rut = rut[0:6] + '.' + rut[6:-1] + rut[-1]
+            ndata[n][0] = rut
+    return ndata
+
+ndata = arreglarRuts(data)
 
 def generarUsuario(usr):
 ######## definicion de tipo de profesional
     tipoMed = ""
-    t = r.randrange(1,4)
+    t = r.randrange(1,6)
     if(t == 1):
-        tipoMed = "Medico/a gral"
+        tipoMed = "Psicologo/a"
     elif(t == 2):
         tipoMed = "Kinesiologo/a"
-    else:
+    elif(t == 3):
         tipoMed = "Fonoaudiologo/a"
+    elif(t == 4):
+        tipoMed = "Educador/a diferencial"
+    else:
+        tipoMed = "Terapeuta ocupacional"
 ######## definicion si admin es de institucion o de sede
     deIns = False
     di = r.randrange(0,2)
@@ -73,6 +93,7 @@ def generarUsuario(usr):
         return [med, rn]
     # 2 = Admin
     elif (rn == 2):
+
         adm = {
             "deIns": deIns,
             "nombre": usr[1],
@@ -121,7 +142,7 @@ def generarUsuario(usr):
 
 
 def llenarBDD(d):
-    for usr in data:
+    for usr in d:
         aux = generarUsuario(usr)
         if (aux[1] == 1):
             medics.insert_one(aux[0])
@@ -136,5 +157,4 @@ def llenarBDD(d):
         else:
             pacientes.insert_one(aux[0])
 
-for usr in data:
-    print(generarUsuario(usr))
+#llenarBDD(ndata)
