@@ -8,6 +8,8 @@ nurses = db["nurses"]
 auxs = db["auxs"]
 spacientes = db["spacientes"]
 pacientes = db["pacientes"]
+sedes = db["sedes"]
+boxs = db["boxs"]
 """
     La idea de este Script es que agarre el archivo "nentrada.txt" y lo manipule de 
 forma que se llene la base de datos con estos datos, poniendo a cada persona 
@@ -140,6 +142,91 @@ def generarUsuario(usr):
         }
         return [pac, rn]
 
+sds = [{
+    "nombre": "EduDown Providencia",
+    "ciudad": "Santiago",
+    "comuna": "Providencia",
+    "email": "contacto.eddprov@gmail.com",
+    "codigo": "edd_prov",
+},
+{
+    "nombre": "EduDown San Bernardo",
+    "ciudad": "Santiago",
+    "comuna": "San Bernardo",
+    "email": "contacto.eddsb@gmail.com",
+    "codigo": "edd_sb",
+},
+{
+    "nombre": "EduDown La Serena",
+    "ciudad": "La Serena",
+    "comuna": "",
+    "email": "contacto.eddls@gmail.com",
+    "codigo": "edd_ls",
+},
+{
+    "nombre": "EduDown Temuco",
+    "ciudad": "Temuco",
+    "comuna": "",
+    "email": "contacto.eddt@gmail.com",
+    "codigo": "edd_t",
+}]
+
+def crearBoxs():
+    listaAuxiliar = []
+    bx = []
+    for x in range(4):
+        plantilla = {
+        "size": "",
+        "nro": "",
+        "codSede": "",
+        "tipoBox": "",
+        }
+        pl = plantilla
+        pl["size"] = "grande"
+        pl["nro"] = str(x+1)
+        pl["tipoBox"] = "general"
+        listaAuxiliar.append(pl)
+    for x in range(4, 8):
+        plantilla = {
+        "size": "",
+        "nro": "",
+        "codSede": "",
+        "tipoBox": "",
+        }
+        pl = plantilla
+        pl["size"]  = "mediano"
+        pl["nro"] = str(x+1)
+        pl["tipoBox"] = "kinesiologia"
+        listaAuxiliar.append(pl)
+    for x in range(8, 12):
+        plantilla = {
+        "size": "",
+        "nro": "",
+        "codSede": "",
+        "tipoBox": "",
+        }
+        pl = plantilla
+        pl["size"] = "pequeno"
+        pl["nro"] = str(x+1)
+        pl["tipoBox"] = "fonoaudiologia"
+        listaAuxiliar.append(pl)
+    for x in range(12):
+        aux = listaAuxiliar
+        aux[x]["codSede"] = "edd_prov"
+        bx.append(aux[x])
+    for x in range(12):
+        aux = listaAuxiliar
+        aux[x]["codSede"] = "edd_sb"
+        bx.append(aux[x])
+    for x in range(12):
+        aux = listaAuxiliar
+        aux[x]["codSede"] = "edd_ls"
+        bx.append(aux[x])
+    for x in range(12):
+        aux = listaAuxiliar
+        aux[x]["codSede"] = "edd_t"
+        bx.append(aux[x])
+    return bx
 
 def llenarBDD(d):
     for usr in d:
@@ -156,5 +243,10 @@ def llenarBDD(d):
             spacientes.insert_one(aux[0])
         else:
             pacientes.insert_one(aux[0])
+    for sede in sds:
+        sedes.insert_one(sede)
+    boxes = crearBoxs()
+    for box in boxes:
+        boxs.insert_one(box)
 
-#llenarBDD(ndata)
+llenarBDD(ndata)
