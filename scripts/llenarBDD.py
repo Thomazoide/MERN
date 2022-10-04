@@ -249,4 +249,6 @@ def llenarBDD(d):
     for box in boxes:
         boxs.insert_one(box)
 
-llenarBDD(ndata)
+#llenarBDD(ndata)
+
+print(sedes)
